@@ -90,6 +90,7 @@ class Snowflake(
             epochSecond = epochSecond,
             validityPeriod = Instant.ofEpochSecond(epoch(maxDeltaSeconds)).toString(),
             workerBits = workerBits,
+            seqBits = seqBits,
             totalWorkerNumber = maxWorkerId + 1,
             sequenceNumberPerSecond = seqMask + 1
         )
@@ -109,6 +110,7 @@ class Snowflake(
         val epochSecond: Long,
         val validityPeriod: String,
         val workerBits: Int,
+        val seqBits: Int,
         val totalWorkerNumber: Long,
         val sequenceNumberPerSecond: Long
     )

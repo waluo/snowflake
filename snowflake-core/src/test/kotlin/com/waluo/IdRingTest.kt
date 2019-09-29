@@ -2,6 +2,7 @@ package com.waluo
 
 import io.kotlintest.inspectors.forAll
 import io.kotlintest.shouldBe
+import io.kotlintest.shouldThrow
 import io.kotlintest.specs.StringSpec
 
 class IdRingTest : StringSpec({
@@ -27,10 +28,14 @@ class IdRingTest : StringSpec({
     }
 
     "generate only unique ids" {
-        val worker = IdWorker(1)
+        val snowflake = Snowflake(timeBits = 30, workerBits = 26)
+        val worker = IdRing(1, ringBits = 6, snowflake = snowflake)
         val n = 2000000
         val distinct = (1..n).map { worker.nextId() }.distinct()
         distinct.size shouldBe n
+        shouldThrow<IllegalArgumentException> {
+            IdRing(1, ringBits = 7, snowflake = snowflake)
+        }.message shouldBe "ringBits[7] can't be greater or equal to timeBits[7]"
     }
 
     "i do not care time goes backwards" {

@@ -16,6 +16,9 @@ class IdRing(
     private val ringIndex = AtomicLong(0)
 
     init {
+        require(ringBits < snowflake.spec().seqBits) {
+            "ringBits[$ringBits] can't be greater or equal to timeBits[${snowflake.spec().seqBits}]"
+        }
         snowflake.verifyWorkerId(workerId)
         val timestamp = timeGen()
         snowflake.verifyTimestamp(timestamp)
